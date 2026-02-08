@@ -9,6 +9,8 @@ from langgraph.graph import END, StateGraph
 from data_cleaning_agent import make_lightweight_data_cleaning_agent
 from eda_workflow.eda_workflow import make_eda_baseline_workflow
 
+from data_analyst_agent.guardrails import check_pii_columns
+
 logger = logging.getLogger(__name__)
 AGENT_NAME = "data_analyst_agent"
 
@@ -58,6 +60,7 @@ class DataAnalystAgent:
                 "user_instructions": user_instructions,
                 "max_retries": max_retries,
                 "retry_count": retry_count,
+                "pii_flagged_columns": [],
                 "data_cleaned": None,
                 "cleaning_response": {},
                 "eda_response": {},
@@ -92,6 +95,12 @@ class DataAnalystAgent:
             return self.response.get("eda_response", {}).get("results")
         return None
 
+    def get_pii_flags(self) -> list:
+        """Return column names flagged as potential PII, or empty list."""
+        if self.response:
+            return self.response.get("pii_flagged_columns", [])
+        return []
+
 
 def make_data_analyst_agent(model, checkpointer: Optional[object] = None):
     """Build a parent graph that orchestrates existing cleaning and EDA graphs."""
@@ -110,9 +119,25 @@ def make_data_analyst_agent(model, checkpointer: Optional[object] = None):
         user_instructions: Optional[str]
         max_retries: int
         retry_count: int
+        pii_flagged_columns: list
         data_cleaned: Optional[dict]
         cleaning_response: dict
         eda_response: dict
+
+    def pii_check_node(state: OrchestrationState) -> dict:
+        """Flag columns that look like PII before any LLM call."""
+        logger.info("Running PII guardrail")
+        columns = list(state.get("data_raw", {}).keys())
+        flagged = check_pii_columns(columns)
+        if flagged:
+            logger.warning("PII guardrail flagged columns: %s", flagged)
+        return {"pii_flagged_columns": flagged}
+
+    def route_after_pii_check(state: OrchestrationState) -> str:
+        """Block the pipeline if PII columns were detected."""
+        if state.get("pii_flagged_columns"):
+            return "end"
+        return "clean_data"
 
     def clean_data_node(state: OrchestrationState) -> dict:
         """Invoke the cleaning sub-graph and return cleaned data."""
@@ -160,10 +185,16 @@ def make_data_analyst_agent(model, checkpointer: Optional[object] = None):
         return "end"
 
     workflow = StateGraph(OrchestrationState)
+    workflow.add_node("pii_check", pii_check_node)
     workflow.add_node("clean_data", clean_data_node)
     workflow.add_node("run_eda", run_eda_node)
 
-    workflow.set_entry_point("clean_data")
+    workflow.set_entry_point("pii_check")
+    workflow.add_conditional_edges(
+        "pii_check",
+        route_after_pii_check,
+        {"clean_data": "clean_data", "end": END},
+    )
     workflow.add_conditional_edges(
         "clean_data",
         route_after_cleaning,
