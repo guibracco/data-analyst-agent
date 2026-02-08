@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "data-analyst-agent"
+version = "0.1.0"
+description = "Minimal LangGraph orchestration for DataAnalystAgent: data_cleaning_agent then EDAWorkflow"
+authors = ["Andres Vourakis"]
+readme = "README.md"
+packages = [{ include = "data_analyst_agent" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+pandas = "^2.0.0"
+langgraph = "~0.2.0"
+langchain = "~0.3.0"
+langchain-openai = "~0.2.0"
+python-dotenv = "^1.0.0"
+data-cleaning-agent = { path = "../data-cleaning-agent", develop = true }
+eda-workflow = { path = "../eda-workflow", develop = true }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

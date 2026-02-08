@@ -1,0 +1,25 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Poetry lockfile (optional for teaching/demo repos)
+poetry.lock
