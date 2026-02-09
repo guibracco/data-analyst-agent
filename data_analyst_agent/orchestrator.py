@@ -204,7 +204,3 @@ def make_data_analyst_agent(model, checkpointer: Optional[object] = None):
 
     return workflow.compile(checkpointer=checkpointer, name=AGENT_NAME)
 
-
-# Backward-compatible aliases for earlier naming
-DataCleaningEDAAgent = DataAnalystAgent
-make_data_cleaning_eda_agent = make_data_analyst_agent
