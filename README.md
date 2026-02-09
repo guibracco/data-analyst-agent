@@ -3,7 +3,7 @@
 A lightweight orchestration layer that chains two existing LangGraph projects into a single pipeline:
 
 1. **`data-cleaning-agent`**: LLM-driven data cleaning
-2. **`eda-workflow`**: automated exploratory data analysis
+2. **`eda-workflow`**: automated first-pass exploratory data analysis
 
 Flow: **raw CSV → clean data → EDA report**
 
