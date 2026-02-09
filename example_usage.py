@@ -23,10 +23,13 @@ if __name__ == "__main__":
     # Update the CSV path for your local dataset.
     csv_path = "./data/cafe_sales.csv"
 
+    print("\n=== Running Pipeline ===")
     agent.invoke_workflow(
         filepath=csv_path,
         user_instructions="Apply standard cleaning, then keep types consistent.",
     )
+
+    print("\n=== Pipeline Complete ===\n")
 
     cleaned_df = agent.get_data_cleaned()
     summary = agent.get_eda_summary()
