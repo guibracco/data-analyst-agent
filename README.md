@@ -1,4 +1,4 @@
-# DataAnalystAgent
+# Data Analyst Agent
 
 A lightweight orchestration layer that chains two existing LangGraph projects into a single pipeline:
 
@@ -47,6 +47,10 @@ poetry run python example_usage.py
 
 ```text
 data-analyst-agent/
+├── data/
+│   ├── cafe_data.csv
+│   ├── factory_iot_telemetry.csv
+│   └── saas_customer_health.csv
 ├── data_analyst_agent/
 │   ├── __init__.py
 │   ├── guardrails.py
