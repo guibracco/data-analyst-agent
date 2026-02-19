@@ -2,14 +2,14 @@
 
 A lightweight orchestration layer that chains two existing LangGraph projects into a single pipeline:
 
-1. **`data-cleaning-agent`**: LLM-driven data cleaning
-2. **`eda-workflow`**: automated first-pass exploratory data analysis
+1. **[`data-cleaning-agent`](https://github.com/guibracco/data-cleaning-agent)**: LLM-driven data cleaning
+2. **[`eda-workflow`](https://github.com/guibracco/eda-workflow)**: automated first-pass exploratory data analysis
 
 Flow: **raw CSV → PII guardrail → clean data → EDA report**
 
 ## Why this project exists
 
-`DataAnalystAgent` demonstrates agent-to-agent orchestration without rewriting either sub-project. The parent graph handles state passing, input guardrails (PII detection), and conditional routing (e.g. blocking the pipeline when PII is found, or skipping EDA when cleaning fails).
+`Data Analyst Agent` demonstrates agent-to-agent orchestration without rewriting either sub-project. The parent graph handles state passing, input guardrails (PII detection), and conditional routing (e.g. blocking the pipeline when PII is found, or skipping EDA when cleaning fails).
 
 ## Setup
 
