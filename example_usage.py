@@ -3,6 +3,9 @@ import warnings
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 logging.basicConfig(level=logging.INFO)
+# Keep project INFO logs, but hide low-level HTTP transport request logs.
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
