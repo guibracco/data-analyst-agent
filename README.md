@@ -54,8 +54,7 @@ data-analyst-agent/
 ├── data_analyst_agent/
 │   ├── __init__.py
 │   ├── guardrails.py
-│   ├── orchestrator.py
-│   └── orchestrator_reference.py
+│   └── orchestrator.py
 ├── .env.example
 ├── example_usage.py
 ├── pyproject.toml
