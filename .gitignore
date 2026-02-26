@@ -22,6 +22,6 @@ dist/
 *.egg-info/
 
 # Generated graph diagram
-graph.png
+# graph.png
 
 AGENTS.md
